@@ -19,4 +19,4 @@ source_url: "Empty"
 
 # {{title}}
 
-*(Atomic content here. 50-300 lines max. Straightforward for humans and AIs.)*
+*(Atomic content here. 50-300 words. Straightforward for humans and AIs.)*

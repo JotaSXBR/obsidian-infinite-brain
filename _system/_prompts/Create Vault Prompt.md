@@ -32,4 +32,4 @@ You are scaffolding a fresh AI-first knowledge graph vault in Obsidian-compatibl
 
 8. Once the structure is created, create one example pillar at pillars/pillar-example-philosophy.md and one example decision at decisions/decision-example-action.md. 
 
-9. Wire the example decision to the example pillar using a typed edge in the JSON array inside the decision's frontmatter edges property. Both example files must stay between 50 and 300 lines max and include the full required frontmatter.
+9. Wire the example decision to the example pillar using a typed edge in the JSON array inside the decision's frontmatter edges property. Both example files must stay between 50 and 300 words and include the full required frontmatter.

@@ -135,7 +135,7 @@ source_url: "https://..." or "Empty"
 
 ### Node Creation
 - Always use the template: frontmatter → `# Title` → body
-- Body should be 50-300 lines max, atomic, well-structured
+- Body should be 50-300 words, atomic, well-structured
 - Every new node needs at least 1 edge to an existing node
 - Use `id` format: `type-descriptive-slug` (kebab-case)
 - Never create duplicate content — always search first

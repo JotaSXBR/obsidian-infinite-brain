@@ -7,7 +7,7 @@ Use this prompt to ingest raw content from the `raw/` folder and decompose it in
 ## Instructions
 
 1. Scan all files inside the `raw/` directory.
-2. For each file, decompose it into atomic concepts — each 50-300 lines max, one idea per node.
+2. For each file, decompose it into atomic concepts — each 50-300 words, one idea per node. Do NOT exceed 300 words per node; longer notes defeat scoped retrieval.
 3. Classify each node with exactly one of the 16 types:
    `pillar`, `decision`, `concept`, `question`, `playbook`, `task`, `event`,
    `pattern`, `hypothesis`, `fact`, `source`, `bookmark`, `note`, `contact`,
@@ -46,7 +46,7 @@ Use this prompt to ingest raw content from the `raw/` folder and decompose it in
 - `tags`: 2-8 per node, lowercase kebab-case.
 - `namespace`: infer from the content domain.
 - `raw/` is only an inbox. Do not create nodes with `type: raw`.
-- After creating all nodes, update `_system/INDEX.md` with the new entries.
+- **MANDATORY:** After creating every node, you MUST append the node's `id`, `summary`, and edge count to the master table in `_system/INDEX.md` under the correct type section. If the index is not updated, the scoped retrieval in the Query Prompt will fail and the vault becomes blind.
 
 ## Output Format
 
@@ -55,7 +55,7 @@ Return each node as a complete markdown file block separated by `===`.
 === nodes: concepts/my-new-concept.md ===
 ---frontmatter---
 # Title
-body (50-300 lines max)
+body (50-300 words)
 ===
 
 === nodes: facts/my-new-fact.md ===
