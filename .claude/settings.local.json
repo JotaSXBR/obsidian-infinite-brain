@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk git *)",
+      "Bash(rtk ls *)",
+      "Bash(rtk read *)"
+    ]
+  }
+}

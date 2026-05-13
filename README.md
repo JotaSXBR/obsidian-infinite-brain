@@ -18,14 +18,16 @@ This repository is a **starter vault**. Clone it, open it in Obsidian, and start
 
 ## Quick Start
 
-1. **Clone** this repository (or use the "Use this template" button):
+1. **Use this template** by clicking the green "Use this template" button on GitHub, or clone directly:
    ```bash
    git clone https://github.com/JotaSXBR/obsidian-infinite-brain.git
    ```
 2. **Open** the cloned folder as a vault in [Obsidian](https://obsidian.md).
-3. **Read** `_system/INDEX.md` to see the current state of the graph.
-4. **Create** your first node using the template in `_templates/Template - Infinite Node.md`.
-5. **Drop** raw material into the `raw/` folder and use the Convert Note prompt to break it into atomic nodes.
+3. **Open** the vault folder in Claude Code: `claude` in the terminal at the vault root.
+4. **Read** `_system/INDEX.md` to see the current state of the graph.
+5. **Drop** raw material into the `raw/` folder and run `/convert-note` to decompose it into atomic nodes.
+
+> **GitHub Template Setup:** To enable the "Use this template" button on your own fork, go to the repository **Settings → General** and check **"Template repository"**.
 
 ## Vault Structure
 
@@ -95,16 +97,18 @@ Edges are directional relationships between nodes. Each edge has a `target`, `ty
 
 Full reference: [`_system/EDGE-TYPES.md`](_system/EDGE-TYPES.md)
 
-## Included Prompts
+## Claude Code Skills
 
-The vault ships with four operational prompts in [`_system/_prompts/`](_system/_prompts):
+The vault ships with four skills in [`.claude/skills/`](.claude/skills), invokable as slash commands in Claude Code:
 
-| Prompt | What it does |
+| Command | What it does |
 |---|---|
-| **Create Vault** | Scaffold a fresh vault from scratch |
-| **Convert Note** | Decompose raw content into atomic typed nodes |
-| **Query Vault** | Retrieve answers using scoped graph traversal |
-| **Organize Vault** | Audit and maintain graph health |
+| `/init-vault` | Scaffold a fresh vault from scratch |
+| `/convert-note` | Decompose `raw/` content into atomic typed nodes |
+| `/query-vault` | Answer questions via scoped graph traversal (~600 tokens vs ~9000) |
+| `/organize-vault` | Audit orphans, contradictions, staleness, and cross-links |
+
+The original prompt files are preserved in [`_system/_prompts/`](_system/_prompts) for use with agents that don't support the skill protocol.
 
 ## How It Works With AI Agents
 
