@@ -1,61 +1,60 @@
-# Infinite Brain Vault
+# Infinite Brain
 
-An AI-first Obsidian vault that turns your notes into a typed knowledge graph — built for agents to read, retrieve, and reason over with precision.
+Five Claude Code skills that give any AI agent infinite, structured memory — built on a typed knowledge graph.
 
-## What Is This
+Drop raw material in. Ask questions. The agent builds, maintains, and searches a semantic graph that grows with you.
 
-Most personal knowledge systems store information as long, loosely linked documents. That works fine for humans browsing manually, but it fails when AI agents need to retrieve context. Agents read too much, links don't explain *why* two notes connect, and metadata is too weak for reliable scoped retrieval.
+---
 
-Infinite Brain Vault solves this with five design principles:
+## The Problem
 
-1. **Atomic nodes** — one concept per note, 50–300 lines max.
-2. **Typed nodes** — every note is one of 16 canonical types (decision, concept, hypothesis, fact, etc.).
-3. **Typed edges** — relationships are explicit, directional, and weighted.
-4. **Trust metadata** — each node carries confidence, verification date, and staleness signals.
-5. **Namespaced visibility** — agents filter context by scope before reading content.
+AI agents forget everything between sessions. Personal knowledge systems store information as long, loosely linked documents — fine for humans, broken for agents. They read too much, links don't explain *why* two notes connect, and metadata is too weak for reliable retrieval.
 
-This repository is a **starter vault**. Clone it, open it in Obsidian, and start building your own AI-optimized second brain.
+Infinite Brain solves this with a typed knowledge graph where every note is a **node** and every connection is a typed **edge** — structured for agents to navigate, not just humans to browse.
 
-## Quick Start
+## The Skills
 
-1. **Use this template** by clicking the green "Use this template" button on GitHub, or clone directly:
-   ```bash
-   git clone https://github.com/JotaSXBR/obsidian-infinite-brain.git
-   ```
-2. **Open** the cloned folder as a vault in [Obsidian](https://obsidian.md).
-3. **Open** the vault folder in Claude Code: `claude` in the terminal at the vault root.
-4. **Read** `_system/INDEX.md` to see the current state of the graph.
-5. **Drop** raw material into the `raw/` folder and run `/convert-note` to decompose it into atomic nodes.
+Copy [`.claude/skills/`](.claude/skills) into your project. Five slash commands become available in Claude Code:
 
-> **GitHub Template Setup:** To enable the "Use this template" button on your own fork, go to the repository **Settings → General** and check **"Template repository"**.
+| Command | What it does |
+|---|---|
+| `/init-vault` | Scaffold the memory structure in any directory |
+| `/convert-note` | Decompose raw material into atomic typed nodes |
+| `/query-vault` | Answer questions via graph traversal (~600 tokens, not ~9000) |
+| `/organize-vault` | Interactive audit: orphans, contradictions, stale nodes, gaps |
+| `/vault-health auto` | Scheduled maintenance: confidence decay + health report, no prompts |
 
-## Vault Structure
+### Install
 
-```
-pillars/        Foundational beliefs and principles
-decisions/      Recorded choices with rationale
-concepts/       Ideas, models, and frameworks
-questions/      Known unknowns and open inquiries
-playbooks/      Repeatable procedures
-tasks/          Actionable items
-events/         Dated occurrences
-patterns/       Observed regularities
-hypotheses/     Testable assumptions
-facts/          Verified statements
-sources/        External origins and references
-bookmarks/      Saved but unprocessed links
-notes/          Freeform captures
-contacts/       People or organizations
-references/     Glossary, schema, or pinned data
-custom/         Domain-specific node types
-raw/            Unprocessed inbox (not a node type)
-_system/        Schema, ontology, prompts, agent instructions
-_templates/     Reusable note templates
+```bash
+# 1. Copy the skills into your project
+cp -r .claude/skills/ /your-project/.claude/skills/
+
+# 2. Open your project in Claude Code
+cd /your-project && claude
+
+# 3. Scaffold the memory structure
+/init-vault
 ```
 
-## Node Types
+That's it. The vault is created by the skill — you don't clone a template.
 
-Every node declares exactly one `type` in its frontmatter:
+### Schedule automated maintenance (optional)
+
+```bash
+# Run once to register weekly health checks
+/schedule weekly /vault-health auto
+```
+
+The `/vault-health auto` skill runs confidence decay and writes a health report node. It never auto-fixes — fixes require human approval via `/vault-health`.
+
+---
+
+## How the Graph Works
+
+Every node is an atomic markdown file with typed frontmatter. Every connection is an explicit edge with direction, weight, and a reason.
+
+**16 node types** — one per note, no ambiguity:
 
 | Type | Purpose |
 |---|---|
@@ -74,13 +73,9 @@ Every node declares exactly one `type` in its frontmatter:
 | `note` | Freeform capture |
 | `contact` | Named person with metadata |
 | `reference` | Glossary or terminology link |
-| `custom` | Domain-specific (documented in `_system/LOCAL-TYPES.md`) |
+| `custom` | Domain-specific (document in `_system/LOCAL-TYPES.md`) |
 
-Full definitions: [`_system/NODE-TYPES.md`](_system/NODE-TYPES.md)
-
-## Edge Types
-
-Edges are directional relationships between nodes. Each edge has a `target`, `type`, `weight` (0.0–1.0), and `note`.
+**10 edge types** — relationships with intent:
 
 | Edge | Meaning |
 |---|---|
@@ -92,41 +87,42 @@ Edges are directional relationships between nodes. Each edge has a `target`, `ty
 | `part_of` | Source is sub-component of target |
 | `preceded_by` | Source happened after target |
 | `followed_by` | Source happened before target |
-| `authored_by` | Source created by target (person) |
+| `authored_by` | Source created by target |
 | `tagged_with` | Categorical organization |
 
-Full reference: [`_system/EDGE-TYPES.md`](_system/EDGE-TYPES.md)
+**Trust metadata on every node:**
+- `confidence` (0.0–1.0) — how certain is this?
+- `verified_at` + `verified_by` — when and who last confirmed it
+- `staleness_signal` — the condition that invalidates this node
+- `visibility` — `public` / `namespace` / `private` / `system`
 
-## Claude Code Skills
+---
 
-The vault ships with four skills in [`.claude/skills/`](.claude/skills), invokable as slash commands in Claude Code:
+## This Repo as a Working Example
 
-| Command | What it does |
-|---|---|
-| `/init-vault` | Scaffold a fresh vault from scratch |
-| `/convert-note` | Decompose `raw/` content into atomic typed nodes |
-| `/query-vault` | Answer questions via scoped graph traversal (~600 tokens vs ~9000) |
-| `/organize-vault` | Audit orphans, contradictions, staleness, and cross-links |
+The vault files in this repository are a live example of the skills in action — two wired nodes, full system schema, and the `_system/INDEX.md` agent entry point. Clone it to see the structure before running `/init-vault` in your own project.
 
-The original prompt files are preserved in [`_system/_prompts/`](_system/_prompts) for use with agents that don't support the skill protocol.
+```
+.claude/skills/     ← The skills (the actual product)
+_system/            ← Agent instructions, schema, workflows, index
+_templates/         ← Node template
+pillars/            ← Example node
+decisions/          ← Example node
+raw/                ← Drop unprocessed material here
+[14 other folders]  ← Created by /init-vault, tracked via .gitkeep
+```
 
-## How It Works With AI Agents
+Full agent operating rules: [`_system/AGENTS.md`](_system/AGENTS.md)
+Workflow definitions and scheduling: [`_system/WORKFLOWS.md`](_system/WORKFLOWS.md)
 
-The structured frontmatter on every node enables AI agents (Claude, Cursor, Copilot, etc.) to:
-
-- **Filter by visibility** — agents only read nodes appropriate to the current scope (`public`, `namespace`, `private`, `system`).
-- **Traverse typed edges** — instead of guessing relationships, agents follow explicit, weighted connections between nodes.
-- **Assess trust** — `confidence`, `verified_at`, and `staleness_signal` let agents weigh information quality before using it.
-- **Scope by namespace** — agents avoid cross-contaminating context between unrelated projects.
-
-Point your agent at `_system/AGENTS.md` for the full operating prompt, or use the included prompts to create, convert, query, and organize nodes.
+---
 
 ## Credits & Inspiration
 
-This project was inspired by the Infinite Brain methodology presented by [AI Impact](https://www.youtube.com/@AIImpact) in this video:
+Inspired by the Infinite Brain methodology from [AI Impact](https://www.youtube.com/@AIImpact):
 
 📺 [**How to Build an Infinite Brain with AI**](https://www.youtube.com/watch?v=z02Y-1OvWSM)
 
 ## License
 
-This project is released under the [MIT License](LICENSE.md).
+[MIT](LICENSE.md)
