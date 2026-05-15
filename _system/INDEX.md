@@ -104,6 +104,12 @@
 
 ---
 
+## log
+
+> Log nodes are not indexed here. They live in `logs/` and are self-contained. To review recent operations, scan `logs/` directly.
+
+---
+
 ## Adding New Nodes
 
 When you create a new node:
@@ -113,7 +119,8 @@ When you create a new node:
 3. Populate `edges` with at least one relationship to another node.
 4. Update this index by inserting a row into the appropriate table.
 5. Use `related` for informal wikilinks that don't need a formal edge.
+6. `log` nodes are never added to this index — they are self-contained in `logs/`.
 
 ---
 
-*Last updated: 05/12/2026*
+*Last updated: 05/15/2026*

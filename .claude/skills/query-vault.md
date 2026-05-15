@@ -4,7 +4,7 @@ description: >
   Answer a question by navigating the knowledge graph via typed edges and visibility
   filters. Reduces token cost from ~9000 to ~600 by traversing selectively.
   Invoked with /query-vault.
-allowed-tools: Read, Glob, Grep
+allowed-tools: Read, Write, Glob, Grep
 ---
 
 # Query Vault — Scoped Graph Retrieval
@@ -52,3 +52,9 @@ You are answering a question by navigating the Infinite Brain knowledge graph.
 ---
 
 Ask: "Would you like to save this as a synthesis node?"
+
+8. Write a log node to `logs/log-query-vault-YYYYMMDD-HHmmss.md` using the log schema from `_system/FRONTMATTER-SCHEMA.md`:
+   - `operation: query-vault`
+   - `affected_nodes`: node IDs read during traversal
+   - `summary`: one sentence — the question asked (truncated to 100 chars if needed)
+   - Body (30–80 words): question asked, nodes traversed, confidence returned, whether a synthesis node was saved.

@@ -60,3 +60,13 @@ Flag summaries over 200 chars, placeholder text ("TBD", "1-2 sentences..."), or 
 ### Details
 [File path | Issue | Suggested fix]
 ```
+
+## After Execution
+
+After delivering the report and applying any user-selected fixes:
+
+Write a log node to `logs/log-organize-vault-YYYYMMDD-HHmmss.md` using the log schema from `_system/FRONTMATTER-SCHEMA.md`:
+- `operation: organize-vault`
+- `affected_nodes`: node IDs modified (empty array if user selected "none")
+- `summary`: one sentence — node count, issue count, fixes applied
+- Body (30–80 words): total nodes audited, how many issues found per check, how many fixes the user approved and applied.

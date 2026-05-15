@@ -20,7 +20,7 @@ Every node in the vault must include a frontmatter block at the top of the markd
 ### type
 - **Type:** string
 - **Required:** yes
-- **Allowed Values:** exactly one of: `pillar`, `decision`, `concept`, `question`, `playbook`, `task`, `event`, `pattern`, `hypothesis`, `fact`, `source`, `bookmark`, `note`, `contact`, `reference`, `custom`
+- **Allowed Values:** exactly one of: `pillar`, `decision`, `concept`, `question`, `playbook`, `task`, `event`, `pattern`, `hypothesis`, `fact`, `source`, `bookmark`, `note`, `contact`, `reference`, `custom`, `log`
 - **Notes:** Must match the canonical name in `NODE-TYPES.md` exactly (lowercase, singular).
 
 ### namespace
@@ -136,6 +136,53 @@ related: ["[[fact-cohort-retention-q4]]", "decision-analytics-pricing"]
 source_url: "Empty"
 ---
 ```
+
+---
+
+---
+
+## Log Node Schema
+
+`log` nodes use a reduced schema designed for minimal token cost. Do NOT apply the full frontmatter checklist to log nodes.
+
+### Fields
+
+| Field | Type | Notes |
+|---|---|---|
+| `id` | string | Format: `log-[operation]-[YYYYMMDD-HHmmss]` (e.g., `log-convert-note-20260515-143022`) |
+| `type` | string | Always `log` |
+| `operation` | string | One of: `convert-note`, `query-vault`, `organize-vault`, `vault-health`, `init-vault` |
+| `date` | string | ISO 8601: `"YYYY-MM-DDTHH:MM:SS"` |
+| `namespace` | string | Namespace(s) affected, or `"vault"` if global |
+| `summary` | string | One sentence, under 150 chars |
+| `affected_nodes` | array | Node IDs created or modified. Empty array `[]` if none. |
+| `tags` | array | Always includes `"log"` and the operation name |
+
+### Example
+
+```yaml
+---
+id: log-convert-note-20260515-143022
+type: log
+operation: convert-note
+date: "2026-05-15T14:30:22"
+namespace: personal
+summary: "Processed raw/karpathy-llm-wiki.md → 3 nodes created (concept, source, fact)"
+affected_nodes: ["concept-llm-wiki-pattern", "source-karpathy-llm-wiki", "fact-rag-vs-compounding"]
+tags: ["log", "convert-note"]
+---
+```
+
+### Body
+
+Log body should be 30–80 words. Cover: what ran, what changed, any notable finding or error. No markdown headers — plain prose.
+
+### Rules
+
+- Log nodes are **never edited** after creation.
+- Log nodes are **not indexed** in `_system/INDEX.md` — the `logs/` folder is self-contained.
+- Log nodes are **not subject to confidence decay** in `/vault-health`.
+- Log nodes have `visibility: system` implicitly — agents do not use them for query answers.
 
 ---
 

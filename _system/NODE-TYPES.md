@@ -64,9 +64,19 @@ An ad-hoc node type for domain-specific entities that do not fit the above taxon
 
 ---
 
+## Operational Types
+
+### 17. log
+A lightweight, immutable record of a single skill execution. Logs are written automatically by skills (`/convert-note`, `/query-vault`, `/organize-vault`) at the end of each operation. They use a reduced frontmatter schema (8 fields, no edges, no confidence decay) and live in `logs/`. See `_system/FRONTMATTER-SCHEMA.md` for the log-specific schema.
+
+Logs are never edited after creation. They are the operational audit trail of the vault.
+
+---
+
 ## Type Assignment Guidelines
 
 - Every node **must** have exactly one `type` in its frontmatter.
 - Type must be lowercase, singular, and match the canonical name above exactly.
 - Do not create new types without updating `NODE-TYPES.md` and `FRONTMATTER-SCHEMA.md` first.
 - Types are used by agents to determine interaction patterns, rendering, and edge validity.
+- `log` nodes use a reduced schema — do not apply the full frontmatter checklist to them.

@@ -37,7 +37,9 @@ The vault has these top-level folders:
 | `events/` | Timestamped occurrences |
 | `tasks/` | Actionable items with owner/status |
 | `raw/` | Unprocessed source material; inbox only, not a node type |
+| `raw/processed/` | Originals moved here after `/convert-note` completes — immutable archive |
 | `custom/` | Domain-specific nodes |
+| `logs/` | Operational log nodes (one per skill execution); not indexed in INDEX.md |
 | `_system/` | Vault operating system (schemas, prompts, index) |
 | `_templates/` | Note templates |
 
@@ -80,6 +82,7 @@ Every node must have exactly ONE `type` in frontmatter:
 | `contact` | Named person with metadata |
 | `reference` | Glossary or terminology link |
 | `custom` | Domain-specific (must document in `_system/LOCAL-TYPES.md`) |
+| `log` | Skill execution record (reduced schema, lives in `logs/`, never indexed) |
 
 ---
 
@@ -110,7 +113,7 @@ Every node MUST have complete frontmatter:
 ---
 id: type-slug-kebab-case
 title: "Human-readable title"
-type: [one of 16 types]
+type: [one of 17 types]
 namespace: [project-or-area-in-kebab-case]
 visibility: public | namespace | private | system
 summary: "1-2 sentences for AI scanning"
@@ -155,9 +158,20 @@ source_url: "https://..." or "Empty"
 - Never leave `edges: []` empty unless it's a brand-new isolated node
 - Update `verified_at` and `verified_by` when reviewing
 
+### Raw Material
+- `raw/` is a **read-only reference layer** for agents — treat every file in `raw/` as immutable source material.
+- Never modify files in `raw/` or `raw/processed/`.
+- After `/convert-note` completes, the skill moves the processed original to `raw/processed/`. Agents do not move files manually.
+- If the user wants to update a source, they add a new file to `raw/` — do not overwrite the original.
+
+### Log Writing
+- Every skill execution (`/convert-note`, `/query-vault`, `/organize-vault`) must write one log node to `logs/` at the end of the operation.
+- Use the log schema from `_system/FRONTMATTER-SCHEMA.md` — 8 fields, no edges, no confidence.
+- Log nodes are never edited, never indexed in `_system/INDEX.md`, and never used in query answers.
+- `/vault-health` uses its health report node as its log — it does not write a separate log node.
+
 ### Maintenance
 - After creating/editing, update `_system/INDEX.md` if needed
-- Log significant vault changes in a note
 - Flag contradictions between nodes when you find them
 - If you find an orphan (no edges, no related), connect it or flag it
 

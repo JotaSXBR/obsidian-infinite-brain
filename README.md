@@ -98,6 +98,20 @@ Every node is an atomic markdown file with typed frontmatter. Every connection i
 
 ---
 
+## Raw Material Philosophy
+
+`raw/` is a **read-only reference layer**, not a working folder. Drop source material in — articles, notes, exports, transcripts — and leave it there. Files in `raw/` are the original source of truth for everything the vault knows.
+
+When you run `/convert-note`, the skill reads `raw/` files, decomposes them into atomic nodes, and moves the processed originals to `raw/processed/`. Nothing is deleted. If you need to re-derive or audit a node, the source is always in `raw/processed/`.
+
+The user organizes `raw/` minimally before dropping files — a descriptive filename is enough (`2026-05-15-karpathy-llm-wiki.md`). No tagging or categorization required; that work happens during `/convert-note`.
+
+## Operation Log
+
+Every skill execution writes a lightweight log node to `logs/`. One file per operation, using a reduced 8-field schema (~half the token cost of a regular node). Logs are never indexed in `_system/INDEX.md` — scan `logs/` directly to review recent activity.
+
+This gives you a chronological audit trail of what the agent did, what changed, and what nodes were created or modified — session by session, operation by operation.
+
 ## This Repo as a Working Example
 
 The vault files in this repository are a live example of the skills in action — two wired nodes, full system schema, and the `_system/INDEX.md` agent entry point. Clone it to see the structure before running `/init-vault` in your own project.
@@ -108,12 +122,15 @@ _system/            ← Agent instructions, schema, workflows, index
 _templates/         ← Node template
 pillars/            ← Example node
 decisions/          ← Example node
-raw/                ← Drop unprocessed material here
+raw/                ← Drop source material here (immutable reference)
+raw/processed/      ← Originals moved here after /convert-note
+logs/               ← One log node per skill execution
 [14 other folders]  ← Created by /init-vault, tracked via .gitkeep
 ```
 
 Full agent operating rules: [`_system/AGENTS.md`](_system/AGENTS.md)
 Workflow definitions and scheduling: [`_system/WORKFLOWS.md`](_system/WORKFLOWS.md)
+Future improvements and tool ecosystem: [`TODO.md`](TODO.md)
 
 ---
 
