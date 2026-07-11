@@ -1,3 +1,12 @@
+# ---------------------------------------------------------------------------
+# CHECK AUTOMÁTICO (pode ignorar).
+# Isto NÃO afeta quem usa a memória. O usuário roda o servidor MCP na própria
+# máquina, numa pasta local ou na nuvem — nada disso passa pelo GitHub.
+# Este arquivo só pede aos servidores do GitHub que rodem os testes e o
+# validador (validate.py) quando VOCÊ sobe código novo, avisando se algo
+# quebrou. É gratuito em repositórios públicos. Para checar sua memória na
+# mão a qualquer momento: rode `python validate.py` na pasta do vault.
+# ---------------------------------------------------------------------------
 name: Validate vault
 
 on:
