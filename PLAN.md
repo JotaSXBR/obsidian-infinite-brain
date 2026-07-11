@@ -101,3 +101,49 @@ TypeScript. Flag before Milestone 2.
 - Not building a hosted service or query infrastructure (OKF non-goal too).
 - Not replacing Obsidian's editor — Obsidian stays read/browse only.
 - Not inventing a new schema registry — types remain free strings, documented locally.
+
+---
+
+## 7. Video-derived decisions (source: youtu.be/yP4p3reZUcU)
+
+The video demoes the same "Infinite Brain" lineage this repo credits, but in a heavier,
+context-specific form (SQLite + marketing BI). We cherry-pick ideas, not that architecture.
+
+**Adopted (new M6 — Empirical memory layer, all extension/optional):**
+
+- **Wager & Verdict + active decay** [12:18, 13:24]. A `hypothesis` places a wager on a
+  quantifiable `metric` and links to a `decision`; later an empirical *verdict* confirms or
+  refutes it. A failed verdict actively lowers `confidence` on linked nodes — evidence-based
+  decay, complementing the time-based decay already shipped. Optional pattern: only for
+  decisions that actually have a measurable metric. Realized as frontmatter convention
+  (`wager`, `verdict` fields) + validator support + a `confidence_decay` extension, not new
+  required fields.
+- **Provenance lineage** [inference]. Nodes derived from `raw/` carry a source content hash
+  and a `derived_from` edge to a `source` node — stronger OKF citations + auditable lineage.
+
+**Adopted into existing milestones:**
+
+- **GTD intake triage** [08:11] → refine the `convert-note` prompt (M3): classify each raw
+  item as knowledge / task / reference / discard. Tier-1 stays deterministic in the server;
+  the client may use a cheap model for tier-2 tagging (tiered routing [10:02]) — **no LLM
+  calls inside the MCP server**, to keep it model-agnostic.
+- **Operational nodes** (`tool`/`skill`/`rule`/`agent`/`workflow`) [07:15] → allowed as
+  documented `custom` types in `_system/LOCAL-TYPES.md` (M3), **not** promoted to core types.
+  Capabilities remain primarily in the contract layer (AGENTS.md, MCP tools/prompts).
+- **Frontmatter CI validator** [06:36] → already M5. Confirmed.
+
+**Deferred:**
+
+- **Dataview wager dashboard** — revisit at the very end (depends on Wager & Verdict landing first).
+
+**Rejected (conflicts with locked-in OKF/markdown-first decisions):**
+
+- **SQLite as source of truth** [10:50]. Breaks OKF portability ("cat it / git clone it").
+  The markdown `logs/` folder already provides the audit trail. If write throughput ever
+  becomes a real bottleneck (thousands of nodes), SQLite may return only as a *rebuildable,
+  disposable index* derived from the markdown — never the origin.
+
+**Updated milestone:**
+
+- **M6 — Empirical memory layer:** Wager & Verdict convention + verdict-driven active decay,
+  provenance lineage (source hash + `derived_from`). Extension-only; OKF core untouched.
