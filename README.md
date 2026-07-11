@@ -56,7 +56,7 @@ note, answer from memory, run maintenance). Full detail: [`mcp-server/README.md`
 
 Open the vault folder in Obsidian. The graph view and wikilinks render the memory as an
 interactive map — useful for spotting what's connected, what's isolated, and what's stale.
-Obsidian is the **human reader**; the AI reads and writes through the MCP server.
+Obsidian is the **human reader**; the AI reads and writes through the MCP server. Setup, graph-view caveats, and the Web Clipper capture flow: [`_system/OBSIDIAN.md`](_system/OBSIDIAN.md).
 
 ## Using it with Claude Code
 

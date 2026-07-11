@@ -1,0 +1,25 @@
+name: Validate vault
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install MCP server (with dev deps)
+        run: pip install -e "mcp-server[dev]"
+
+      - name: Run server tests
+        run: python -m pytest -q mcp-server/tests/
+
+      - name: Validate OKF conformance + graph integrity
+        run: python validate.py .

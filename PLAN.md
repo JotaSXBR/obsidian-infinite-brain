@@ -91,7 +91,7 @@ TypeScript. Flag before Milestone 2.
 - **M2 — MCP server:** `mcp-server/` package with tools/resources/prompts + client configs.
 - **M3 — De-Claude-ify:** `AGENTS.md` canonical (agents.md convention), `.claude/skills`
   demoted to one adapter, README rewrite around "any AI via MCP + Obsidian reader".
-- **M4 — Obsidian reader:** `_system/DASHBOARD.md` (Dataview), graph-view config for typed
+- **M4 — Obsidian reader (done; dashboard deferred):** `_system/DASHBOARD.md` (Dataview), graph-view config for typed
   edges, Web Clipper note.
 - **M5 — Verification (done):** `validate.py` (OKF conformance + schema), MCP smoke tests,
   GitHub Action running the validator on push.
