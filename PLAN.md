@@ -104,46 +104,49 @@ TypeScript. Flag before Milestone 2.
 
 ---
 
-## 7. Video-derived decisions (source: youtu.be/yP4p3reZUcU)
+## 7. Positioning correction — "memory for AI" (not a business tool)
 
-The video demoes the same "Infinite Brain" lineage this repo credits, but in a heavier,
-context-specific form (SQLite + marketing BI). We cherry-pick ideas, not that architecture.
+The maintainer's steer: this is designed as **the AI's own persistent memory** — the way a
+mind remembers across sessions (facts, decisions, preferences, corrections, context, people).
+It is NOT a knowledge-management / team / enterprise tool. All business framing is dropped.
+This sharpens, not weakens, the pitch: *own your memory as plain files, across any AI, no lock-in.*
 
-**Adopted (new M6 — Empirical memory layer, all extension/optional):**
+Consequences:
 
-- **Wager & Verdict + active decay** [12:18, 13:24]. A `hypothesis` places a wager on a
-  quantifiable `metric` and links to a `decision`; later an empirical *verdict* confirms or
-  refutes it. A failed verdict actively lowers `confidence` on linked nodes — evidence-based
-  decay, complementing the time-based decay already shipped. Optional pattern: only for
-  decisions that actually have a measurable metric. Realized as frontmatter convention
-  (`wager`, `verdict` fields) + validator support + a `confidence_decay` extension, not new
-  required fields.
-- **Provenance lineage** [inference]. Nodes derived from `raw/` carry a source content hash
-  and a `derived_from` edge to a `source` node — stronger OKF citations + auditable lineage.
+- **README / docs (M3):** lead with "portable memory any AI can use, that you own as files,
+  readable in Obsidian." The taxonomy is an implementation detail the server/AI handle — not
+  the headline. No "teams / companies / BI" language.
+- **Node/edge schema stays** — `fact`, `concept`, `decision`, `question`, `contact`, `event`,
+  etc. are how a mind organizes; `confidence`/`visibility`/`namespace` are "how sure / what
+  context / what scope." That is memory, and needs no change.
+
+## 8. Video-derived decisions (source: youtu.be/yP4p3reZUcU)
+
+The video demoes the same "Infinite Brain" lineage this repo credits, but heavier and
+business-specific (SQLite + marketing BI). We keep ideas, not that architecture.
 
 **Adopted into existing milestones:**
 
 - **GTD intake triage** [08:11] → refine the `convert-note` prompt (M3): classify each raw
   item as knowledge / task / reference / discard. Tier-1 stays deterministic in the server;
-  the client may use a cheap model for tier-2 tagging (tiered routing [10:02]) — **no LLM
-  calls inside the MCP server**, to keep it model-agnostic.
-- **Operational nodes** (`tool`/`skill`/`rule`/`agent`/`workflow`) [07:15] → allowed as
-  documented `custom` types in `_system/LOCAL-TYPES.md` (M3), **not** promoted to core types.
-  Capabilities remain primarily in the contract layer (AGENTS.md, MCP tools/prompts).
-- **Frontmatter CI validator** [06:36] → already M5. Confirmed.
+  the client may use a cheap model for tier-2 tagging — **no LLM calls inside the MCP server**.
+- **Provenance lineage** → nodes derived from `raw/` carry a source hash + `derived_from` edge
+  to a `source` node (M3/convert convention). Stronger OKF citations, auditable lineage.
+- **Operational nodes** (`tool`/`skill`/`rule`/`agent`/`workflow`) [07:15] → allowed only as
+  documented `custom` types in `_system/LOCAL-TYPES.md` (M3), never core types. Capabilities
+  live in the contract layer (AGENTS.md, MCP), separate from memory.
+- **Frontmatter CI validator** [06:36] → M5. Confirmed.
 
-**Deferred:**
+**M6 — Belief revision (slimmed, general, no business framing):**
 
-- **Dataview wager dashboard** — revisit at the very end (depends on Wager & Verdict landing first).
+- Keep the **temporal confidence decay** already shipped (forgetting/doubting over time is a
+  real memory property).
+- Reuse only the *general principle* of the video's wager/verdict: a belief that is later
+  **contradicted by newer, higher-confidence evidence** has its `confidence` lowered — learning
+  from being wrong, memory correction. Realized as an optional `confidence_decay`/audit
+  extension driven by `contradicts` edges. **No metrics, no wagers, no business KPIs.**
 
-**Rejected (conflicts with locked-in OKF/markdown-first decisions):**
+**Rejected:** SQLite as source of truth [10:50] — breaks OKF portability. Markdown `logs/` is
+the audit trail. SQLite may return later only as a rebuildable, disposable index.
 
-- **SQLite as source of truth** [10:50]. Breaks OKF portability ("cat it / git clone it").
-  The markdown `logs/` folder already provides the audit trail. If write throughput ever
-  becomes a real bottleneck (thousands of nodes), SQLite may return only as a *rebuildable,
-  disposable index* derived from the markdown — never the origin.
-
-**Updated milestone:**
-
-- **M6 — Empirical memory layer:** Wager & Verdict convention + verdict-driven active decay,
-  provenance lineage (source hash + `derived_from`). Extension-only; OKF core untouched.
+**Deferred:** Dataview dashboard — decide at the very end.

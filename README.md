@@ -1,144 +1,82 @@
 # Infinite Brain
 
-Five Claude Code skills that give any AI agent infinite, structured memory — built on a typed knowledge graph.
+**Portable, persistent memory for any AI — stored as plain files you own.**
 
-Drop raw material in. Ask questions. The agent builds, maintains, and searches a semantic graph that grows with you.
+AI forgets everything between sessions. Infinite Brain gives any AI a long-term memory
+that lives as ordinary markdown files: readable by you, writable by the AI, browsable in
+Obsidian, shippable over git. No database, no proprietary store, no lock-in. If you can
+open a text file, you can read your AI's memory. If you can `git clone`, you can move it.
+
+The memory is an [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
+bundle — an open, permissive standard — so it stays portable across tools and time.
 
 ---
 
-## The Problem
+## Why
 
-AI agents forget everything between sessions. Personal knowledge systems store information as long, loosely linked documents — fine for humans, broken for agents. They read too much, links don't explain *why* two notes connect, and metadata is too weak for reliable retrieval.
+- **You own it.** Memory is plain markdown on your disk, not rows in someone's cloud.
+- **Any AI can use it.** An MCP server exposes the memory to Claude, ChatGPT, Cursor, or
+  any MCP-capable client. Point a new model at the same files and it picks up where the
+  last one left off.
+- **It stays clean.** The server does the mechanical work — parsing, validation, linking,
+  indexing, forgetting stale entries — and refuses malformed writes, so the memory doesn't
+  rot even when a weaker model is writing to it.
+- **You can read it like a mind map.** Open the folder in Obsidian for a live graph of how
+  memories connect.
 
-Infinite Brain solves this with a typed knowledge graph where every note is a **node** and every connection is a typed **edge** — structured for agents to navigate, not just humans to browse.
+## How it works
 
-## The Skills
+Every memory is one small markdown file — a **node** — with a bit of YAML at the top saying
+what kind of memory it is and how sure the AI is of it. Nodes link to each other, so the
+memory is a graph the AI can traverse instead of re-reading everything. The AI decides what
+to remember and how confident to be; the server keeps it consistent.
 
-Copy [`.claude/skills/`](.claude/skills) into your project. Five slash commands become available in Claude Code:
+That's the whole idea. The type/edge vocabulary and trust fields are implementation details
+the AI and the server handle for you — you don't have to learn them to use it. If you want
+the full contract, it lives in [`_system/AGENTS.md`](_system/AGENTS.md) and
+[`_system/OKF-MAPPING.md`](_system/OKF-MAPPING.md).
 
-| Command | What it does |
-|---|---|
-| `/init-vault` | Scaffold the memory structure in any directory |
-| `/convert-note` | Decompose raw material into atomic typed nodes |
-| `/query-vault` | Answer questions via graph traversal (~600 tokens, not ~9000) |
-| `/organize-vault` | Interactive audit: orphans, contradictions, stale nodes, gaps |
-| `/vault-health auto` | Scheduled maintenance: confidence decay + health report, no prompts |
-
-### Install
+## Quickstart
 
 ```bash
-# 1. Copy the skills into your project
-cp -r .claude/skills/ /your-project/.claude/skills/
+# 1. Install the memory server
+cd mcp-server && pip install -e .
 
-# 2. Open your project in Claude Code
-cd /your-project && claude
+# 2. Point any MCP client at your vault (see mcp-server/clients/ for ready configs)
+INFINITE_BRAIN_VAULT=/path/to/your/vault python -m infinite_brain_mcp
 
-# 3. Scaffold the memory structure
-/init-vault
+# 3. Talk to your AI. Ask it to remember things, then ask what it knows — across sessions.
 ```
 
-That's it. The vault is created by the skill — you don't clone a template.
+The server gives any client **tools** (read/write/validate memories, search the graph,
+audit, decay), **resources** (the memory contract + schema), and **prompts** (capture a
+note, answer from memory, run maintenance). Full detail: [`mcp-server/README.md`](mcp-server/README.md).
 
-### Schedule automated maintenance (optional)
+## Read it in Obsidian
 
-```bash
-# Run once to register weekly health checks
-/schedule weekly /vault-health auto
-```
+Open the vault folder in Obsidian. The graph view and wikilinks render the memory as an
+interactive map — useful for spotting what's connected, what's isolated, and what's stale.
+Obsidian is the **human reader**; the AI reads and writes through the MCP server.
 
-The `/vault-health auto` skill runs confidence decay and writes a health report node. It never auto-fixes — fixes require human approval via `/vault-health`.
+## Using it with Claude Code
 
----
+Claude Code users also get five slash-command skills in [`.claude/skills/`](.claude/skills)
+(`init-vault`, `convert-note`, `query-vault`, `organize-vault`, `vault-health`). These are a
+thin **adapter** over the same memory contract the MCP server exposes — one way in among
+many, not the source of truth.
 
-## How the Graph Works
+## Design notes
 
-Every node is an atomic markdown file with typed frontmatter. Every connection is an explicit edge with direction, weight, and a reason.
+- **Portable by construction.** OKF-conformant: the memory is just files with a `type`.
+  Unknown fields are preserved, never stripped. See [`_system/OKF-MAPPING.md`](_system/OKF-MAPPING.md).
+- **Deterministic in the server, judgment in the model.** Parsing, validation, indexing,
+  and confidence decay are code; deciding what to remember is the AI's job.
+- **Memory forgets.** Confidence decays over time and drops when newer evidence contradicts
+  an old belief — so the memory reflects what's currently true, not everything ever said.
 
-**16 node types** — one per note, no ambiguity:
+## Credits
 
-| Type | Purpose |
-|---|---|
-| `pillar` | Foundational belief or value |
-| `decision` | Recorded choice with rationale |
-| `concept` | Abstract idea or mental model |
-| `question` | Known unknown being tracked |
-| `playbook` | Repeatable procedure |
-| `task` | Actionable item |
-| `event` | Timestamped occurrence |
-| `pattern` | Recurring validated solution |
-| `hypothesis` | Testable assumption |
-| `fact` | Verifiable ground truth |
-| `source` | External origin reference |
-| `bookmark` | Saved link (unprocessed) |
-| `note` | Freeform capture |
-| `contact` | Named person with metadata |
-| `reference` | Glossary or terminology link |
-| `custom` | Domain-specific (document in `_system/LOCAL-TYPES.md`) |
-
-**10 edge types** — relationships with intent:
-
-| Edge | Meaning |
-|---|---|
-| `supports` | Source backs target |
-| `contradicts` | Source opposes target |
-| `depends_on` | Source requires target |
-| `derived_from` | Source synthesized from target |
-| `related_to` | Loose thematic association |
-| `part_of` | Source is sub-component of target |
-| `preceded_by` | Source happened after target |
-| `followed_by` | Source happened before target |
-| `authored_by` | Source created by target |
-| `tagged_with` | Categorical organization |
-
-**Trust metadata on every node:**
-- `confidence` (0.0–1.0) — how certain is this?
-- `verified_at` + `verified_by` — when and who last confirmed it
-- `staleness_signal` — the condition that invalidates this node
-- `visibility` — `public` / `namespace` / `private` / `system`
-
----
-
-## Raw Material Philosophy
-
-`raw/` is a **read-only reference layer**, not a working folder. Drop source material in — articles, notes, exports, transcripts — and leave it there. Files in `raw/` are the original source of truth for everything the vault knows.
-
-When you run `/convert-note`, the skill reads `raw/` files, decomposes them into atomic nodes, and moves the processed originals to `raw/processed/`. Nothing is deleted. If you need to re-derive or audit a node, the source is always in `raw/processed/`.
-
-The user organizes `raw/` minimally before dropping files — a descriptive filename is enough (`2026-05-15-karpathy-llm-wiki.md`). No tagging or categorization required; that work happens during `/convert-note`.
-
-## Operation Log
-
-Every skill execution writes a lightweight log node to `logs/`. One file per operation, using a reduced 8-field schema (~half the token cost of a regular node). Logs are never indexed in `_system/INDEX.md` — scan `logs/` directly to review recent activity.
-
-This gives you a chronological audit trail of what the agent did, what changed, and what nodes were created or modified — session by session, operation by operation.
-
-## This Repo as a Working Example
-
-The vault files in this repository are a live example of the skills in action — two wired nodes, full system schema, and the `_system/INDEX.md` agent entry point. Clone it to see the structure before running `/init-vault` in your own project.
-
-```
-.claude/skills/     ← The skills (the actual product)
-_system/            ← Agent instructions, schema, workflows, index
-_templates/         ← Node template
-pillars/            ← Example node
-decisions/          ← Example node
-raw/                ← Drop source material here (immutable reference)
-raw/processed/      ← Originals moved here after /convert-note
-logs/               ← One log node per skill execution
-[14 other folders]  ← Created by /init-vault, tracked via .gitkeep
-```
-
-Full agent operating rules: [`_system/AGENTS.md`](_system/AGENTS.md)
-Workflow definitions and scheduling: [`_system/WORKFLOWS.md`](_system/WORKFLOWS.md)
-Future improvements and tool ecosystem: [`TODO.md`](TODO.md)
-
----
-
-## Credits & Inspiration
-
-Inspired by the Infinite Brain methodology from [AI Impact](https://www.youtube.com/@AIImpact):
-
-📺 [**How to Build an Infinite Brain with AI**](https://www.youtube.com/watch?v=z02Y-1OvWSM)
+Inspired by the Infinite Brain methodology from [AI Impact](https://www.youtube.com/@AIImpact).
 
 ## License
 

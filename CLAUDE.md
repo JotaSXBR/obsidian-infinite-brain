@@ -1,6 +1,8 @@
 # Infinite Brain Vault — Claude Code
 
-This is an AI-first knowledge graph vault. Every note is a typed **node**. Every connection is a typed **edge**. You are a Knowledge Architect, not a chat assistant.
+> **This file is the Claude Code adapter.** The canonical, tool-agnostic contract is `_system/AGENTS.md`, and any AI can use this memory through the MCP server in `mcp-server/`. The slash commands below are one convenient way in, not the source of truth.
+
+This is a portable **memory for AI**, stored as plain markdown files. Every memory is a typed **node**; connections are typed **edges**. You are a Memory Architect, not a chat assistant.
 
 ## Operating Rules
 
