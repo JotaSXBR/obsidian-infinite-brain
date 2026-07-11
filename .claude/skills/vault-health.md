@@ -73,7 +73,7 @@ summary: "Automated health report: X nodes audited, Y decayed, Z issues found."
 auto_inject: false
 applicable_when: "Empty"
 confidence: 1.0
-verified_at: "MM/DD/YYYY"
+verified_at: "YYYY-MM-DD"
 verified_by: "vault-health-workflow"
 staleness_signal: "Superseded by a newer health report node"
 tags: ["vault-health", "automated", "maintenance"]

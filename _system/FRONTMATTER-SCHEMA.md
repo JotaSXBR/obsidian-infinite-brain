@@ -60,7 +60,7 @@ Every node in the vault must include a frontmatter block at the top of the markd
 
 ### verified_at
 - **Type:** string (date)
-- **Format:** `MM/DD/YYYY`
+- **Format:** `YYYY-MM-DD`
 - **Default:** `"Empty"`
 - **Notes:** Date on which the node's content or conclusions were last reviewed or confirmed by a human. Use `"Empty"` until first verification.
 
@@ -124,7 +124,7 @@ summary: Creators who have been posting consistently for 29+ months are more lik
 auto_inject: false
 applicable_when: When evaluating creator monetization strategies
 confidence: 0.65
-verified_at: 03/15/2026
+verified_at: 2026-03-15
 verified_by: Alice Chen
 staleness_signal: If free tier retention exceeds 60% at 12 months, re-evaluate
 tags: ["creator-economy", "monetization", "analytics", "conversion"]
@@ -197,7 +197,7 @@ Log body should be 30–80 words. Cover: what ran, what changed, any notable fin
 - [ ] `auto_inject` is boolean
 - [ ] `applicable_when` is a string or `"Empty"`
 - [ ] `confidence` is between 0.0 and 1.0
-- [ ] `verified_at` is MM/DD/YYYY or `"Empty"`
+- [ ] `verified_at` is YYYY-MM-DD or `"Empty"`
 - [ ] `verified_by` is a string or `"Empty"`
 - [ ] `staleness_signal` is a non-empty conditional string
 - [ ] `tags` is a non-empty array of kebab-case strings

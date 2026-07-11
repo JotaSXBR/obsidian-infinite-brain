@@ -57,13 +57,12 @@ OKF expresses relationships as **standard markdown links in the body**, untyped
 
 The MCP server can auto-mirror high-weight edges into body links on write.
 
-## 4. Dates: ISO 8601 (pending migration)
+## 4. Dates: ISO 8601 (done, M1)
 
-OKF recommends ISO 8601 for `timestamp` (SPEC §4.1). The vault currently uses
-`MM/DD/YYYY` for `verified_at`, while `log` nodes already use ISO 8601 `date`.
-**Proposed (M1):** migrate `verified_at` to ISO 8601 (`YYYY-MM-DD`) for a single,
-sortable, unambiguous date convention across all node types. This is the only change
-in M1 that alters an existing convention — held for maintainer sign-off before applying.
+OKF recommends ISO 8601 for `timestamp` (SPEC §4.1). All node dates now use ISO 8601
+`YYYY-MM-DD`: `verified_at` was migrated from `MM/DD/YYYY`, and `log` nodes already
+used ISO 8601 `date`. One sortable, unambiguous date convention across all node types.
+The validator enforces `verified_at` as `YYYY-MM-DD` or `"Empty"`.
 
 ## 5. Reserved files
 

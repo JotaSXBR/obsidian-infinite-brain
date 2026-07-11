@@ -123,4 +123,4 @@ When you create a new node:
 
 ---
 
-*Last updated: 05/15/2026*
+*Last updated: 2026-05-15*

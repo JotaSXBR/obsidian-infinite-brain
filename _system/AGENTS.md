@@ -120,7 +120,7 @@ summary: "1-2 sentences for AI scanning"
 auto_inject: false
 applicable_when: "Empty"
 confidence: 0.0-1.0
-verified_at: "MM/DD/YYYY" or "Empty"
+verified_at: "YYYY-MM-DD" or "Empty"
 verified_by: "Name or id" or "Empty"
 staleness_signal: "Condition that invalidates this node"
 tags: ["tag-one", "tag-two"]

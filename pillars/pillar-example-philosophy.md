@@ -8,7 +8,7 @@ summary: The founding principle that deliberate, recorded decisions outperform a
 auto_inject: false
 applicable_when: "Empty"
 confidence: 1.0
-verified_at: 05/11/2026
+verified_at: 2026-05-11
 verified_by: System Bootstrap
 staleness_signal: If the organization dissolves or this vault is archived, mark as historical
 tags: ["core-philosophy", "decision-making", "institutional-memory", "knowledge-management"]
@@ -72,4 +72,4 @@ Every agent and human operating within this vault should:
 
 ---
 
-*This pillar was bootstrapped as part of the initial vault scaffolding on 05/11/2026.*
+*This pillar was bootstrapped as part of the initial vault scaffolding on 2026-05-11.*

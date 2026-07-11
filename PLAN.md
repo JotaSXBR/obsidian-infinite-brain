@@ -86,7 +86,7 @@ TypeScript. Flag before Milestone 2.
 ## 5. Milestones
 
 - **M0 — Foundations (this session):** repo analyzed, this plan, GitHub access wired. *(in progress)*
-- **M1 — OKF layer:** `OKF-MAPPING.md`, root `index.md` + `okf_version`, ISO 8601 date
+- **M1 — OKF layer (done):** `OKF-MAPPING.md`, root `index.md` + `okf_version`, ISO 8601 date
   migration, field alias docs.
 - **M2 — MCP server:** `mcp-server/` package with tools/resources/prompts + client configs.
 - **M3 — De-Claude-ify:** `AGENTS.md` canonical (agents.md convention), `.claude/skills`

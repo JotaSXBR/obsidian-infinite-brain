@@ -8,7 +8,7 @@ summary: When facing ambiguous problems with time pressure, default to reversibl
 auto_inject: false
 applicable_when: When a team is stuck in analysis paralysis or debating a non-urgent choice
 confidence: 0.85
-verified_at: 05/11/2026
+verified_at: 2026-05-11
 verified_by: System Bootstrap
 staleness_signal: If a reversible action causes a cascade of unrecoverable side effects, reconsider the default
 tags: ["operational-decision", "reversibility", "momentum", "default-behavior"]
@@ -99,4 +99,4 @@ This decision is itself an example of the principle it draws from.
 
 ---
 
-*This decision node was created as part of the vault scaffolding bootstrap on 05/11/2026.*
+*This decision node was created as part of the vault scaffolding bootstrap on 2026-05-11.*

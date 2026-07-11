@@ -20,7 +20,7 @@ You are scaffolding a fresh AI-first knowledge graph vault in Obsidian-compatibl
 - auto_inject: boolean
 - applicable_when: string or "Empty"
 - confidence: float between 0.0 and 1.0
-- verified_at: date (MM/DD/YYYY) or "Empty"
+- verified_at: date (YYYY-MM-DD) or "Empty"
 - verified_by: string or "Empty"
 - staleness_signal: specific condition that invalidates the node
 - tags: array of strings
