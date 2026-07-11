@@ -1,0 +1,25 @@
+[project]
+name = "infinite-brain-mcp"
+version = "0.2.0"
+description = "Tool-agnostic MCP server over an OKF markdown knowledge-graph vault (Infinite Brain)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "mcp>=1.2.0",
+    "python-frontmatter>=1.1.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+infinite-brain-mcp = "infinite_brain_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["infinite_brain_mcp"]

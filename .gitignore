@@ -12,3 +12,12 @@ desktop.ini
 
 # Trash
 .trash/
+
+# Python / MCP server
+__pycache__/
+*.egg-info/
+*.pyc
+.pytest_cache/
+build/
+dist/
+.venv/

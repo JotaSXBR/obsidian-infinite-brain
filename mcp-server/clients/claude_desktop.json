@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "infinite-brain": {
+      "command": "python",
+      "args": ["-m", "infinite_brain_mcp", "--vault", "/absolute/path/to/your/vault"],
+      "env": {
+        "INFINITE_BRAIN_VAULT": "/absolute/path/to/your/vault"
+      }
+    }
+  }
+}
