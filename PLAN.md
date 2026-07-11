@@ -93,7 +93,7 @@ TypeScript. Flag before Milestone 2.
   demoted to one adapter, README rewrite around "any AI via MCP + Obsidian reader".
 - **M4 — Obsidian reader:** `_system/DASHBOARD.md` (Dataview), graph-view config for typed
   edges, Web Clipper note.
-- **M5 — Verification:** `validate.py` (OKF conformance + schema), MCP smoke tests,
+- **M5 — Verification (done):** `validate.py` (OKF conformance + schema), MCP smoke tests,
   GitHub Action running the validator on push.
 
 ## 6. Non-goals

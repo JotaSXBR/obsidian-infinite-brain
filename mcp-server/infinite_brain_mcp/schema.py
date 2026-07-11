@@ -1,7 +1,7 @@
 """Taxonomy + validation for Infinite Brain nodes (OKF core + extensions)."""
 from __future__ import annotations
 import re
-from datetime import datetime
+from datetime import datetime, date
 
 # 17 node types -> folder name
 TYPE_TO_FOLDER = {
@@ -38,6 +38,9 @@ def folder_for(node_type: str) -> str:
 
 
 def is_iso_date(v) -> bool:
+    # YAML parses unquoted YYYY-MM-DD into date/datetime objects — those are valid.
+    if isinstance(v, (date, datetime)):
+        return True
     if not isinstance(v, str) or not _ISO_DATE_RE.match(v):
         return False
     try:

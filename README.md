@@ -68,7 +68,8 @@ many, not the source of truth.
 ## Design notes
 
 - **Portable by construction.** OKF-conformant: the memory is just files with a `type`.
-  Unknown fields are preserved, never stripped. See [`_system/OKF-MAPPING.md`](_system/OKF-MAPPING.md).
+  Unknown fields are preserved, never stripped. `python validate.py` checks conformance +
+  graph integrity, and runs in CI on every push. See [`_system/OKF-MAPPING.md`](_system/OKF-MAPPING.md).
 - **Deterministic in the server, judgment in the model.** Parsing, validation, indexing,
   and confidence decay are code; deciding what to remember is the AI's job.
 - **Memory forgets.** Confidence decays over time and drops when newer evidence contradicts
