@@ -5,13 +5,19 @@ CONVERT_NOTE = """You are ingesting raw source material into the Infinite Brain 
 Read the vault contract first (resource: infinite-brain://system/agents).
 
 1. Call `raw_list` and pick the target file (ask the user if ambiguous). Treat raw files as immutable.
-2. Read the file. Decompose it into ATOMIC nodes — one idea per node, 50–300 words.
+2. Read the file. First triage it (GTD): is any part actionable? Split into knowledge to
+   remember, `task` nodes for actions, `reference`/`source` for pointers, and discard noise.
+   Tier-1 filtering is deterministic (you decide with simple rules); use a cheap model for
+   bulk tagging if the client offers one. Then decompose the keep-pile into ATOMIC nodes —
+   one idea per node, 50–300 words.
 3. For each node, build frontmatter per infinite-brain://system/frontmatter-schema:
    pick exactly one content type, a kebab-case `id`, a <=200-char `summary`,
    honest `confidence`, a specific `staleness_signal`, 2–8 `tags`, and at least one
    typed `edge` to an existing node (use `graph_query`/`index_read` to find targets).
 4. Validate each draft with `node_validate`; fix errors before writing.
-5. Write each node with `node_create`.
+5. Stamp provenance: call `raw_hash` on the source file and put the returned hash in each
+   derived node's frontmatter (`source_hash`), plus a `derived_from` edge to a `source` node
+   representing the original. Then write each node with `node_create`.
 6. Call `raw_mark_processed` on the source file.
 7. Call `index_rebuild`.
 8. Write a log node (type: log) recording operation, affected_nodes, and a one-line summary.
@@ -30,14 +36,15 @@ read few nodes, not the whole vault.
 
 ORGANIZE_VAULT = """You are auditing the graph for health issues. Never auto-fix.
 1. Call `vault_audit` for orphans, integrity errors, stale nodes, and warnings.
-2. Call `confidence_decay` with dry_run=true to preview decay.
+2. Call `confidence_decay` and `belief_revision` with dry_run=true to preview both temporal
+   decay and memories contradicted by newer, stronger evidence.
 3. For each orphan, propose 2–3 concrete edges (target + type + weight).
 4. Present a prioritized action list and ask which to apply. Apply only what the user approves
    (via `node_update`), then `index_rebuild` and write an organize-vault log node."""
 
 VAULT_HEALTH = """Maintenance workflow. Two modes.
 - interactive: run audit + dry-run decay, present priority actions, apply only approved fixes.
-- auto (unattended): call `confidence_decay` with dry_run=false, then `vault_audit`, then write a
+- auto (unattended): call `confidence_decay` and `belief_revision` with dry_run=false, then `vault_audit`, then write a
   health report node (type: note, visibility: system) and `index_rebuild`. NO other fixes, NO prompts.
 Decay never deletes and is reversible via git. Every run writes a node — the audit trail lives in the vault."""
 

@@ -35,7 +35,7 @@ See `clients/` for ready configs: `claude_desktop.json`, `cursor.json`, and
 
 | Kind | Names |
 |---|---|
-| Tools (14) | `list_node_types` `list_edge_types` `node_read` `node_validate` `node_create` `node_update` `index_read` `index_rebuild` `graph_query` `graph_neighbors` `vault_audit` `confidence_decay` `raw_list` `raw_mark_processed` |
+| Tools (16) | `list_node_types` `list_edge_types` `node_read` `node_validate` `node_create` `node_update` `index_read` `index_rebuild` `graph_query` `graph_neighbors` `vault_audit` `confidence_decay` `belief_revision` `raw_hash` `raw_list` `raw_mark_processed` |
 | Resources (6) | `infinite-brain://system/{agents,node-types,edge-types,frontmatter-schema,okf-mapping}`, `infinite-brain://index` |
 | Prompts (5) | `convert-note` `query-vault` `organize-vault` `vault-health` `init-vault` |
 

@@ -18,8 +18,8 @@ Vault root resolution order: `--vault` arg → `$INFINITE_BRAIN_VAULT` → curre
 
 **What the client sees**
 
-- **14 tools** — node CRUD + validate, index read/rebuild, graph query/neighbors,
-  audit, confidence decay, raw inbox.
+- **16 tools** — node CRUD + validate, index read/rebuild, graph query/neighbors,
+  audit, confidence + belief-revision decay, provenance hash, raw inbox.
 - **6 resources** — the agent contract and schema files:
   `infinite-brain://system/agents`, `.../node-types`, `.../edge-types`,
   `.../frontmatter-schema`, `.../okf-mapping`, and `infinite-brain://index`.

@@ -1,6 +1,7 @@
 """Vault I/O — load, save, and index Infinite Brain nodes."""
 from __future__ import annotations
 import os
+import hashlib
 from pathlib import Path
 import frontmatter
 from . import schema
@@ -91,6 +92,16 @@ class Vault:
         dst = dst_dir / filename
         src.rename(dst)
         return str(dst.relative_to(self.root))
+
+
+    def raw_hash(self, filename: str) -> str:
+        """SHA-256 of a raw source file, for provenance lineage on derived nodes."""
+        src = self.root / "raw" / filename
+        if not src.exists():
+            src = self.root / "raw" / "processed" / filename
+        if not src.exists():
+            raise FileNotFoundError(f"raw/{filename} not found")
+        return "sha256:" + hashlib.sha256(src.read_bytes()).hexdigest()
 
     # ---- system files ----
     def read_system(self, name: str) -> str | None:

@@ -82,4 +82,65 @@ def audit(vault: Vault):
         "integrity_errors": bad_edges,
         "nodes_with_warnings": missing_fields,
         "stale": sorted(stale, key=lambda x: -x["days"]),
+        "belief_revisions": belief_revision(vault, dry_run=True)["changes"],
     }
+
+
+def belief_revision(vault: Vault, dry_run: bool = True):
+    """General 'learning from being wrong': when a node is `contradicts`-linked by a
+    source that is at least as confident, lower the contradicted node's confidence.
+    Deterministic, reversible via git. No metrics, no business logic — memory correction.
+
+    Rule per contradicting edge: new = max(0.1, target_conf - 0.2 * weight), and tag
+    the target `contradicted`. The strongest applicable contradiction wins.
+    """
+    by_id = {}
+    for n in vault.load_all():
+        if "_error" in n or n.get("type") == "log":
+            continue
+        if n.get("id"):
+            by_id[n["id"]] = n
+
+    proposals = {}  # target_id -> (new_conf, source_id, weight)
+    for src in by_id.values():
+        try:
+            src_conf = float(src.get("confidence"))
+        except (TypeError, ValueError):
+            continue
+        for e in (src.get("edges") or []):
+            if e.get("type") != "contradicts":
+                continue
+            tgt_id = e.get("target")
+            tgt = by_id.get(tgt_id)
+            if not tgt:
+                continue
+            try:
+                tgt_conf = float(tgt.get("confidence"))
+            except (TypeError, ValueError):
+                continue
+            if src_conf < tgt_conf:
+                continue  # weaker evidence does not revise a stronger belief
+            try:
+                weight = float(e.get("weight", 0.5))
+            except (TypeError, ValueError):
+                weight = 0.5
+            new = max(0.1, round(tgt_conf - 0.2 * weight, 2))
+            if new < tgt_conf:
+                cur = proposals.get(tgt_id)
+                if cur is None or new < cur[0]:
+                    proposals[tgt_id] = (new, src.get("id"), weight)
+
+    changes = []
+    for tgt_id, (new, src_id, weight) in proposals.items():
+        tgt = by_id[tgt_id]
+        changes.append({"id": tgt_id, "old": float(tgt.get("confidence")),
+                        "new": new, "contradicted_by": src_id, "weight": weight})
+        if not dry_run:
+            meta = {k: v for k, v in tgt.items() if not k.startswith("_")}
+            meta["confidence"] = new
+            tags = meta.get("tags") or []
+            if "contradicted" not in tags:
+                tags.append("contradicted")
+            meta["tags"] = tags
+            vault.write(meta, tgt.get("_body", ""))
+    return {"dry_run": dry_run, "revised": len(changes), "changes": changes}

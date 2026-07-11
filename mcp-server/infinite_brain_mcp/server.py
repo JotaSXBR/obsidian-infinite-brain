@@ -157,6 +157,24 @@ def raw_mark_processed(filename: str) -> dict:
         return {"moved": False, "error": str(e)}
 
 
+
+
+@mcp.tool()
+def belief_revision(dry_run: bool = True) -> dict:
+    """Lower confidence on memories contradicted by newer, at-least-as-confident evidence
+    (learning from being wrong). Deterministic, reversible via git. Set dry_run=false to write."""
+    return maintenance.belief_revision(_vault(), dry_run)
+
+
+@mcp.tool()
+def raw_hash(filename: str) -> dict:
+    """Return the SHA-256 provenance hash of a raw source file, to stamp on derived nodes."""
+    try:
+        return {"filename": filename, "hash": _vault().raw_hash(filename)}
+    except FileNotFoundError as e:
+        return {"error": str(e)}
+
+
 # ----------------------------- resources -----------------------------
 def _sys_resource(name):
     def fn() -> str:

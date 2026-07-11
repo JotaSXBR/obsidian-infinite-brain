@@ -61,3 +61,24 @@ def test_okf_conformance_type_required(tmp_path):
     v = _fixture_vault(tmp_path)
     res = schema.validate_node({"id": "x", "title": "no type"}, set())
     assert res["errors"] and "type" in res["errors"][0]
+
+
+def test_belief_revision(tmp_path):
+    from infinite_brain_mcp import maintenance
+    v = _fixture_vault(tmp_path)
+    old = {"id": "fact-earth-flat", "title": "Earth is flat", "type": "fact",
+           "namespace": "test", "visibility": "public", "summary": "An old wrong belief.",
+           "auto_inject": False, "confidence": 0.6, "verified_at": "Empty",
+           "verified_by": "x", "staleness_signal": "n/a", "tags": ["geo"], "edges": []}
+    v.write(old, "body")
+    new = {"id": "fact-earth-round", "title": "Earth is round", "type": "fact",
+           "namespace": "test", "visibility": "public", "summary": "Contradicts the old belief.",
+           "auto_inject": False, "confidence": 0.99, "verified_at": "Empty",
+           "verified_by": "x", "staleness_signal": "n/a", "tags": ["geo"],
+           "edges": [{"target": "fact-earth-flat", "type": "contradicts",
+                      "weight": 1.0, "note": "evidence"}]}
+    v.write(new, "body")
+    res = maintenance.belief_revision(v, dry_run=False)
+    assert res["revised"] == 1
+    assert v.read("fact-earth-flat")["confidence"] == 0.4
+    assert "contradicted" in v.read("fact-earth-flat")["tags"]
