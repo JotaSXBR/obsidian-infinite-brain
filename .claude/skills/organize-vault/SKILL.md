@@ -14,7 +14,7 @@ You are auditing the Infinite Brain knowledge graph for health issues.
 ## Steps
 
 1. Read `_system/INDEX.md` for current state baseline.
-2. Run the 8 checks below.
+2. Run the 8 checks below on content nodes only. Exclude `logs/` and any node with `visibility: system` (e.g. vault-health report notes) — they are intentionally edge-free and must not be reported as orphans.
 3. Deliver the report.
 4. Ask: "Which of these actions should I execute?" — never auto-fix without confirmation.
 

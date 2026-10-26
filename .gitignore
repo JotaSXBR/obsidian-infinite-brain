@@ -5,6 +5,9 @@
 # Obsidian cache
 .obsidian/.obsidian-cache
 
+# Claude Code per-user settings
+.claude/settings.local.json
+
 # OS files
 .DS_Store
 Thumbs.db

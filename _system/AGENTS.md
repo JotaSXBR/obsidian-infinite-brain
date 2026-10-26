@@ -60,9 +60,9 @@ Every node declares `visibility` so agents can filter context before reading con
 
 ---
 
-## Node Types (16)
+## Node Types (16 content types + `log`)
 
-Every node must have exactly ONE `type` in frontmatter:
+Every node must have exactly ONE `type` in frontmatter. Content nodes use one of the first 16; `log` is reserved for skill execution records:
 
 | Type | Description |
 |---|---|
@@ -113,7 +113,7 @@ Every node MUST have complete frontmatter:
 ---
 id: type-slug-kebab-case
 title: "Human-readable title"
-type: [one of 17 types]
+type: [one of the 16 content types]
 namespace: [project-or-area-in-kebab-case]
 visibility: public | namespace | private | system
 summary: "1-2 sentences for AI scanning"
@@ -165,7 +165,7 @@ source_url: "https://..." or "Empty"
 - If the user wants to update a source, they add a new file to `raw/` — do not overwrite the original.
 
 ### Log Writing
-- Every skill execution (`/convert-note`, `/query-vault`, `/organize-vault`) must write one log node to `logs/` at the end of the operation.
+- Every skill execution (`/init-vault`, `/convert-note`, `/query-vault`, `/organize-vault`) must write one log node to `logs/` at the end of the operation.
 - Use the log schema from `_system/FRONTMATTER-SCHEMA.md` — 8 fields, no edges, no confidence.
 - Log nodes are never edited, never indexed in `_system/INDEX.md`, and never used in query answers.
 - `/vault-health` uses its health report node as its log — it does not write a separate log node.

@@ -4,6 +4,7 @@ description: >
   Vault maintenance workflow: confidence decay + full health audit + report node.
   Two modes: interactive (/vault-health) asks before fixing; automated (/vault-health auto)
   only writes the report and decays confidence — zero fixes, zero prompts.
+argument-hint: "[auto]"
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -11,9 +12,10 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 ## Mode Detection
 
-**Check the first argument:**
-- No argument → **interactive mode**: run all phases, ask before executing fixes.
-- Argument is `auto` → **auto mode**: run phases 1–3 only, stop before phase 4. No questions. No fixes. Write report and exit.
+Arguments: $ARGUMENTS
+
+- Arguments empty → **interactive mode**: run all phases, ask before executing fixes.
+- Arguments are `auto` → **auto mode**: run phases 1–3 only, stop before phase 4. No questions. No fixes. Write report and exit.
 
 Auto mode is designed for scheduled runs where no human is present.
 
@@ -37,13 +39,15 @@ Safe to run in both modes. Decay is deterministic and reversible via git.
 4. Update only the `confidence` field (and `tags` for >365 case). Touch nothing else.
 5. Track: nodes scanned, nodes decayed, breakdown by type.
 
-**Skip:** `visibility: system` nodes, `verified_at: "Empty"` nodes, nodes created < 30 days ago.
+**Skip:** `visibility: system` nodes, `verified_at: "Empty"` nodes, and everything in `logs/`. (The schema has no creation-date field, so age is measured only from `verified_at`.)
 
 ---
 
 ## Phase 2 — Health Audit
 
 Collect findings only. Do not modify any node during this phase.
+
+Audit content nodes only: exclude `logs/` and `visibility: system` nodes, including earlier health report notes, which are intentionally edge-free.
 
 1. **Orphan Census** — zero edges AND zero `related` links.
 2. **Contradiction Scan** — conflicting claims within the same namespace.
@@ -60,7 +64,7 @@ Collect findings only. Do not modify any node during this phase.
 
 Run in both modes. This is the only write operation in auto mode (besides decay).
 
-Create `notes/note-vault-health-YYYYMMDD.md`:
+Create `notes/note-vault-health-YYYYMMDD.md`. If that file already exists (a second run on the same day), use `note-vault-health-YYYYMMDD-2`, `-3`, … for both the filename and `id` — never overwrite an earlier report:
 
 ```yaml
 ---
@@ -117,6 +121,6 @@ Interactive mode only:
 
 Output the Priority Actions list and ask:
 
-"Health report written to `notes/note-vault-health-YYYYMMDD.md`. Which actions should I execute? (reply with numbers, or 'none')"
+"Health report written to `notes/<report-id>.md`. Which actions should I execute? (reply with numbers, or 'none')"
 
 Execute only what the user selects. For each fix: confirm the change, apply it, mark the action as `[x]` in the report node.

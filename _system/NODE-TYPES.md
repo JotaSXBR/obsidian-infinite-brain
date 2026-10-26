@@ -67,7 +67,7 @@ An ad-hoc node type for domain-specific entities that do not fit the above taxon
 ## Operational Types
 
 ### 17. log
-A lightweight, immutable record of a single skill execution. Logs are written automatically by skills (`/convert-note`, `/query-vault`, `/organize-vault`) at the end of each operation. They use a reduced frontmatter schema (8 fields, no edges, no confidence decay) and live in `logs/`. See `_system/FRONTMATTER-SCHEMA.md` for the log-specific schema.
+A lightweight, immutable record of a single skill execution. Logs are written automatically by skills (`/init-vault`, `/convert-note`, `/query-vault`, `/organize-vault`) at the end of each operation. They use a reduced frontmatter schema (8 fields, no edges, no confidence decay) and live in `logs/`. See `_system/FRONTMATTER-SCHEMA.md` for the log-specific schema.
 
 Logs are never edited after creation. They are the operational audit trail of the vault.
 

@@ -32,7 +32,7 @@ Agent-agnostic workflow definitions for Infinite Brain automation. Each workflow
 Create `.github/workflows/vault-health.yml` — triggers the scheduled agent remotely via Claude Code CLI on a cron. See the GITHUB-ACTIONS section below.
 
 ### Cursor / Gemini CLI / Copilot
-Manually invoke `_system/_prompts/Organize Vault Prompt.md` + apply decay rules from `.claude/skills/vault-health.md` Phase 1. The skill file is readable by any agent.
+Manually invoke `_system/_prompts/Organize Vault Prompt.md` + apply decay rules from `.claude/skills/vault-health/SKILL.md` Phase 1. The skill file is readable by any agent.
 
 ---
 
@@ -59,6 +59,9 @@ on:
     - cron: '0 8 * * 1'   # Every Monday at 08:00 UTC
   workflow_dispatch:        # Manual trigger
 
+permissions:
+  contents: write           # Required for the commit/push step
+
 jobs:
   health:
     runs-on: ubuntu-latest
@@ -69,17 +72,17 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           npm install -g @anthropic-ai/claude-code
-          claude --print --skill vault-health auto
+          claude -p "/vault-health auto" --permission-mode acceptEdits
       - name: Commit health report
         run: |
           git config user.name "vault-health[bot]"
           git config user.email "vault-health@users.noreply.github.com"
-          git add notes/ _system/INDEX.md
+          git add -A
           git diff --cached --quiet || git commit -m "chore: vault health report $(date +%Y-%m-%d)"
           git push
 ```
 
-> **Note:** `--skill vault-health` requires Claude Code CLI to support skill invocation via flag. Check current CLI docs — fallback is to pass the skill content as `--system-prompt`.
+> **Note:** Skills are invoked in headless mode by passing the slash command as the prompt. `git add -A` is required because confidence decay edits nodes in every content folder, not just `notes/`.
 
 ---
 
