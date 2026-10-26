@@ -3,7 +3,8 @@ name: query-vault
 description: >
   Answer a question by navigating the knowledge graph via typed edges and visibility
   filters. Reduces token cost from ~9000 to ~600 by traversing selectively.
-  Invoked with /query-vault.
+  Invoked with /query-vault [question].
+argument-hint: "[question]"
 allowed-tools: Read, Write, Glob, Grep
 ---
 
@@ -11,9 +12,11 @@ allowed-tools: Read, Write, Glob, Grep
 
 You are answering a question by navigating the Infinite Brain knowledge graph.
 
+Question: $ARGUMENTS
+
 ## Steps
 
-1. Ask: "What would you like to know?"
+1. If the question above is empty, ask: "What would you like to know?"
 2. Read `_system/INDEX.md` — get the full map of existing nodes.
 3. Determine scope:
    - Named namespace → prefer nodes from that namespace

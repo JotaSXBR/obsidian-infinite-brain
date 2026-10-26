@@ -27,8 +27,9 @@ Copy [`.claude/skills/`](.claude/skills) into your project. Five slash commands 
 ### Install
 
 ```bash
-# 1. Copy the skills into your project
-cp -r .claude/skills/ /your-project/.claude/skills/
+# 1. Copy the skills into your project (each skill is a folder containing SKILL.md)
+mkdir -p /your-project/.claude/skills
+cp -R .claude/skills/. /your-project/.claude/skills/
 
 # 2. Open your project in Claude Code
 cd /your-project && claude

@@ -18,7 +18,7 @@ Five skills are available via slash commands:
 | `/vault-health` | Automated workflow: confidence decay + full audit + health report node |
 | `/init-vault` | Scaffold a fresh vault in a new directory |
 
-To schedule `/vault-health` weekly: run `/schedule weekly /vault-health` once.
+To schedule `/vault-health` weekly: run `/schedule weekly /vault-health auto` once. (Use `auto` — interactive mode stops to ask questions, which an unattended run cannot answer.)
 Workflow definitions and multi-agent setup: `_system/WORKFLOWS.md`
 
 ## Quick Reference
